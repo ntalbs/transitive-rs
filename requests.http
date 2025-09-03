@@ -1,0 +1,18 @@
+GET http://localhost
+x-transitive-dest: https://www.google.com
+
+#
+GET http://localhost
+x-transitive-dest: https://httpbin.org/headers
+
+#
+GET http://localhost/?x-transitive-dest=https://httpbin.org/ip
+
+#
+GET http://localhost/?x-transitive-dest=https%3A%2F%2Fgoogle.com
+
+#
+GET http://localhost/?x-transitive-dest=https://ntalbs.github.io
+
+#
+GET http://localhost/?a=10&b=20
