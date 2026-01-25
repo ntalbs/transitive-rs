@@ -22,7 +22,8 @@ trait Forward {
 
 impl Forward for HttpRequest {
     fn destination(&self) -> Option<String> {
-        let dest = self.headers()
+        let dest = self
+            .headers()
             .get("x-transitive-dest")
             .and_then(|h| h.to_str().ok())
             .map(|s| s.to_string());
@@ -72,10 +73,17 @@ async fn forward(req: HttpRequest, _body: String) -> impl Responder {
             .connector(connector)
             .finish();
 
-        let mut res = client.get(dest).send().await.unwrap();
-        // TODO: forward request headers
+        let mut proxy_req = client.get(dest);
+
+        for (name, value) in req.headers().iter() {
+            if let Ok(value_str) = value.to_str() {
+                proxy_req = proxy_req.insert_header((name.clone(), value_str));
+            }
+        }
+
+        let mut proxy_res = proxy_req.send().await.unwrap();
         // TODO: copy proxy response headers to response
-        let body = res.body().await.unwrap();
+        let body = proxy_res.body().await.unwrap();
         HttpResponse::Ok().body(body)
     } else {
         HttpResponse::BadRequest().body("Missing x-transitive-dest header or query parameter")
