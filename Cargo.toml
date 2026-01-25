@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4"
-awc = { version = "3.7.0", features = ["rustls-0_23"] }
+awc = { version = "3.8", features = ["rustls-0_23"] }
 clap = { version = "4", features = ["derive"] }
 env_logger = "0"
 log = "0.4"
