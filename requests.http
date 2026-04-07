@@ -16,3 +16,10 @@ GET http://localhost/?x-transitive-dest=https://ntalbs.github.io
 
 #
 GET http://localhost/?a=10&b=20
+
+#
+POST http://localhost
+x-transitive-dest: http://localhost:3000/path/to?a=10&b=20
+accept-charset: "utf-8"
+h1: hello
+h2: world
